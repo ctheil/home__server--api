@@ -23,8 +23,11 @@ export const postState = async (
     let state = await Roku.getState();
     if (state.state === toggleModeTo) {
       return res
-        .status(304)
-        .json({ message: `State is already set to ${toggleModeTo}` });
+        .status(200)
+        .json({
+          message: `State is already set to ${toggleModeTo}`,
+          state: state,
+        });
     }
     // const state = await toggle(toggleModeTo);
     const roku = new Roku();
