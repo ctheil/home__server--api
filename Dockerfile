@@ -1,13 +1,13 @@
 FROM node:18.7.0
 
-WORKDIR /
+WORKDIR /aoo
 
-COPY package.json package.json
-COPY package-lock.json package-lock.json
+COPY package*.json ./
 
-RUN npm i
+RUN npm ci --only=production
 
-COPY . .
+COPY ./dist ./dist
+COPY ./data ./data
 
 EXPOSE 8081
 
