@@ -8,14 +8,18 @@ interface Controller {
   next: NextFunction;
 }
 
-export const postMode = async (
+export const postState = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const toggleModeTo = req.body.mode;
+  const toggleModeTo = req.body.state;
 
   try {
+    if (!toggleModeTo) {
+      const error = new Error("No mode to toggle to.");
+      throw error;
+    }
     let state = await Roku.getState();
     if (state.state === toggleModeTo) {
       return res
@@ -24,9 +28,12 @@ export const postMode = async (
     }
     // const state = await toggle(toggleModeTo);
     const roku = new Roku();
+    console.log(roku);
     const result = await roku.togglePictureState(toggleModeTo);
+    console.log(result);
 
     state = await Roku.getState();
+    console.log(state);
 
     res
       .status(200)

@@ -2,9 +2,9 @@ import { Router } from "express";
 
 const router = Router();
 
-import { getState, postMode } from "../controllers/roku";
+import { getState, postState } from "../controllers/roku";
 
-router.post("/mode", postMode);
 router.get("/state", getState);
+router.post("/state", postState);
 
 export default router;

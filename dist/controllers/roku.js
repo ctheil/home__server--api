@@ -12,11 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getState = exports.postMode = void 0;
+exports.getState = exports.postState = void 0;
 const Roku_1 = __importDefault(require("../models/Roku"));
-const postMode = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const toggleModeTo = req.body.mode;
+const postState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const toggleModeTo = req.body.state;
     try {
+        if (!toggleModeTo) {
+            const error = new Error("No mode to toggle to.");
+            throw error;
+        }
         let state = yield Roku_1.default.getState();
         if (state.state === toggleModeTo) {
             return res
@@ -25,8 +29,11 @@ const postMode = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         }
         // const state = await toggle(toggleModeTo);
         const roku = new Roku_1.default();
+        console.log(roku);
         const result = yield roku.togglePictureState(toggleModeTo);
+        console.log(result);
         state = yield Roku_1.default.getState();
+        console.log(state);
         res
             .status(200)
             .json({ message: "Roku picture mode updated", state: state });
@@ -35,7 +42,7 @@ const postMode = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         res.status(500).json({ message: "Failed to update state...", error: err });
     }
 });
-exports.postMode = postMode;
+exports.postState = postState;
 const getState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const state = yield Roku_1.default.getState();
