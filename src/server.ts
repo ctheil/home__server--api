@@ -14,6 +14,6 @@ app.use(bodyParser.json());
 
 app.use("/roku", rokuRoutes);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Listening on ${process.env.PORT}`);
+app.listen(8081, () => {
+  console.log(`Listening on 8081`);
 });

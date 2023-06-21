@@ -13,6 +13,6 @@ const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
 app.use("/roku", roku_1.default);
-app.listen(process.env.PORT, () => {
-    console.log(`Listening on ${process.env.PORT}`);
+app.listen(8081, () => {
+    console.log(`Listening on 8081`);
 });
