@@ -9,28 +9,35 @@ export const getState = async (
 ) => {
   const { deviceName } = req.params;
   if (!deviceName)
-    res.status(422).json({ message: "No device name provided in the request" });
+    return res
+      .status(422)
+      .json({ message: "No device name provided in the request" });
+  try {
+    const device = await getDevice(deviceName);
+    const stateData = (await device.getState()).data.properties;
 
-  const device = await getDevice(deviceName);
-  const stateData = (await device.getState()).data.properties;
+    const state: any = {};
 
-  const state: any = {};
+    stateData.map((d: any) => {
+      const keys = Object.keys(d);
+      state[keys[0]] = d[keys[0]];
+    });
 
-  stateData.map((d: any) => {
-    const keys = Object.keys(d);
-    state[keys[0]] = d[keys[0]];
-  });
+    const derivedState =
+      state.brightness === 100
+        ? "full"
+        : state.brightness <= 99 && state.brightness > 0
+        ? "half"
+        : "off";
 
-  const derivedState =
-    state.brightness === 100
-      ? "full"
-      : state.brightness <= 99 && state.brightness > 0
-      ? "half"
-      : "off";
-
-  res
-    .status(200)
-    .json({ message: "Good request", stateData: state, state: derivedState });
+    res
+      .status(200)
+      .json({ message: "Good request", stateData: state, state: derivedState });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Something went wrong fetching device state." });
+  }
 };
 
 export const setBulbState = async (
@@ -45,21 +52,26 @@ export const setBulbState = async (
 
   const { deviceName } = req.params;
   const newState = req.body;
+  try {
+    const device = await getDevice(deviceName);
 
-  const device = await getDevice(deviceName);
+    newState.powerState = newState.powerState === "on" ? true : false;
 
-  newState.powerState = newState.powerState === "on" ? true : false;
+    if (newState.powerState) device.turnOn();
+    else {
+      device.turnOff();
+      return res.status(200).json({ message: "Good request" });
+    }
 
-  if (newState.powerState) device.turnOn();
-  else {
-    device.turnOff();
+    device.setBrightness(newState.brightness);
+
+    if (newState.color) device.setColor(newState.color);
     return res.status(200).json({ message: "Good request" });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Something went wrong setting the state." });
   }
-
-  device.setBrightness(newState.brightness);
-
-  if (newState.color) device.setColor(newState.color);
-  return res.status(200).json({ message: "Good request" });
 };
 
 export const getStripState = async (

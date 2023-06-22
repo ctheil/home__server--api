@@ -15,22 +15,31 @@ const express_validator_1 = require("express-validator");
 const getState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { deviceName } = req.params;
     if (!deviceName)
-        res.status(422).json({ message: "No device name provided in the request" });
-    const device = yield (0, govee_1.getDevice)(deviceName);
-    const stateData = (yield device.getState()).data.properties;
-    const state = {};
-    stateData.map((d) => {
-        const keys = Object.keys(d);
-        state[keys[0]] = d[keys[0]];
-    });
-    const derivedState = state.brightness === 100
-        ? "full"
-        : state.brightness <= 99 && state.brightness > 0
-            ? "half"
-            : "off";
-    res
-        .status(200)
-        .json({ message: "Good request", stateData: state, state: derivedState });
+        return res
+            .status(422)
+            .json({ message: "No device name provided in the request" });
+    try {
+        const device = yield (0, govee_1.getDevice)(deviceName);
+        const stateData = (yield device.getState()).data.properties;
+        const state = {};
+        stateData.map((d) => {
+            const keys = Object.keys(d);
+            state[keys[0]] = d[keys[0]];
+        });
+        const derivedState = state.brightness === 100
+            ? "full"
+            : state.brightness <= 99 && state.brightness > 0
+                ? "half"
+                : "off";
+        res
+            .status(200)
+            .json({ message: "Good request", stateData: state, state: derivedState });
+    }
+    catch (err) {
+        res
+            .status(500)
+            .json({ message: "Something went wrong fetching device state." });
+    }
 });
 exports.getState = getState;
 const setBulbState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -40,18 +49,25 @@ const setBulbState = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         res.status(422).json({ message: "", errors: errorMessages });
     const { deviceName } = req.params;
     const newState = req.body;
-    const device = yield (0, govee_1.getDevice)(deviceName);
-    newState.powerState = newState.powerState === "on" ? true : false;
-    if (newState.powerState)
-        device.turnOn();
-    else {
-        device.turnOff();
+    try {
+        const device = yield (0, govee_1.getDevice)(deviceName);
+        newState.powerState = newState.powerState === "on" ? true : false;
+        if (newState.powerState)
+            device.turnOn();
+        else {
+            device.turnOff();
+            return res.status(200).json({ message: "Good request" });
+        }
+        device.setBrightness(newState.brightness);
+        if (newState.color)
+            device.setColor(newState.color);
         return res.status(200).json({ message: "Good request" });
     }
-    device.setBrightness(newState.brightness);
-    if (newState.color)
-        device.setColor(newState.color);
-    return res.status(200).json({ message: "Good request" });
+    catch (err) {
+        res
+            .status(500)
+            .json({ message: "Something went wrong setting the state." });
+    }
 });
 exports.setBulbState = setBulbState;
 const getStripState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
