@@ -26,20 +26,29 @@ const getState = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             const keys = Object.keys(d);
             state[keys[0]] = d[keys[0]];
         });
-        const derivedState = state.brightness >= 51
-            ? "full"
-            : state.brightness <= 50 && state.brightness > 0
-                ? "half"
-                : "off";
+        let derivedState = "off";
+        if (state.brightness >= 51) {
+            derivedState = "full";
+        }
+        else if (state.brightness <= 50 && state.brightness > 0) {
+            derivedState = "half";
+        }
+        if (state.powerState === "off") {
+            derivedState = state.powerState;
+        }
+        // derivedState =
+        //   state.brightness >= 51
+        //     ? "full"
+        //     : state.brightness <= 50 && state.brightness > 0
+        //     ? "half"
+        //     : "off";
         res
             .status(200)
             .json({ message: "Good request", stateData: state, state: derivedState });
     }
     catch (err) {
         console.log(err);
-        res
-            .status(500)
-            .json({
+        res.status(500).json({
             message: "Something went wrong fetching device state.",
             state: "unknown",
         });

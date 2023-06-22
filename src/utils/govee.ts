@@ -1,20 +1,7 @@
 // @ts-ignore
 import Govee from "node-govee-led";
-
-// const testClient = {
-//   apiKey:
-// }
-
-// // Turn on
-// Client.turnOn();
-// // Turn off
-// Client.turnOff();
-// // Set color
-// Client.setColor("<hex color code here>");
-// // Set brightness
-// Client.setBrightness(<number from 1-100>);
-// // Get device state
-// Client.getState();
+import fs from "fs/promises";
+import path from "path";
 
 interface Device {
   device: string;
@@ -28,24 +15,26 @@ interface Device {
 
 const GOVEE_API_KEY = "c778f145-07cd-4ea6-b519-c1e06df6ba6e";
 
-const GoveeClient = new Govee({
-  apiKey: GOVEE_API_KEY,
-  mac: "",
-  model: "",
-});
-
 export const getDevice = async (deviceName: string) => {
-  const devices: { devices: Device[] } = await GoveeClient.getDevices();
-  const target = devices.devices.find((d: Device) => {
-    return d.deviceName === deviceName;
-  });
-  if (!target) {
-    return;
+  try {
+    const d = await fs.readFile(path.join(__dirname, "../../data/bulbs.json"));
+    const devices = JSON.parse(d.toString());
+    const target = devices.find((d: any) => {
+      return d.deviceName === deviceName;
+    });
+
+    if (!target) {
+      const error = new Error("no device found.");
+      throw error;
+    }
+    const device = new Govee({
+      apiKey: GOVEE_API_KEY,
+      mac: target.MAC,
+      model: target.model,
+    });
+    return device;
+  } catch (err) {
+    console.warn("ERROR IN GET DEVICE: ", err);
+    throw err;
   }
-  const device = new Govee({
-    apiKey: GOVEE_API_KEY,
-    mac: target.device,
-    model: target.model,
-  });
-  return device;
 };
