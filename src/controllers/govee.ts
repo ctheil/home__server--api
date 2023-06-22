@@ -21,7 +21,16 @@ export const getState = async (
     state[keys[0]] = d[keys[0]];
   });
 
-  res.status(200).json({ message: "Good request", state: state });
+  const derivedState =
+    state.brightness === 100
+      ? "full"
+      : state.brightness <= 99 && state.brightness > 0
+      ? "half"
+      : "off";
+
+  res
+    .status(200)
+    .json({ message: "Good request", stateData: state, state: derivedState });
 };
 
 export const setBulbState = async (
