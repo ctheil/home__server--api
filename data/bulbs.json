@@ -8,5 +8,10 @@
     "deviceName": "overhead_n_w",
     "MAC": "41:D6:D4:AD:FC:A6:E9:74",
     "model": "H6009"
+  },
+  {
+    "deviceName": "strips",
+    "MAC": "EF:52:D4:AD:FC:C6:8E:DC",
+    "model": "H619D"
   }
 ]

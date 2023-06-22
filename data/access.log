@@ -109,3 +109,5 @@
 ::1 - - [22/Jun/2023:23:09:47 +0000] "POST /govee/group/state/bedroom HTTP/1.1" 200 28 "-" "PostmanRuntime/7.32.3"
 ::1 - - [22/Jun/2023:23:12:07 +0000] "POST /govee/group/state/bedroom HTTP/1.1" 200 28 "-" "PostmanRuntime/7.32.3"
 ::1 - - [22/Jun/2023:23:13:36 +0000] "GET /govee/group/state/bedroom HTTP/1.1" 200 43 "-" "PostmanRuntime/7.32.3"
+::1 - - [22/Jun/2023:23:21:05 +0000] "POST /govee/bulb/state/strips HTTP/1.1" 200 89 "-" "PostmanRuntime/7.32.3"
+::1 - - [22/Jun/2023:23:21:19 +0000] "POST /govee/bulb/state/strips HTTP/1.1" 200 26 "-" "PostmanRuntime/7.32.3"
