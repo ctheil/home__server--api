@@ -15,8 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDevice = void 0;
 // @ts-ignore
 const node_govee_led_1 = __importDefault(require("node-govee-led"));
+const GOVEE_API_KEY = "c778f145-07cd-4ea6-b519-c1e06df6ba6e";
 const GoveeClient = new node_govee_led_1.default({
-    apiKey: "c778f145-07cd-4ea6-b519-c1e06df6ba6e",
+    apiKey: GOVEE_API_KEY,
     mac: "",
     model: "",
 });
@@ -29,7 +30,7 @@ const getDevice = (deviceName) => __awaiter(void 0, void 0, void 0, function* ()
         return;
     }
     const device = new node_govee_led_1.default({
-        apiKey: process.env.GOOVE_API_KEY,
+        apiKey: GOVEE_API_KEY,
         mac: target.device,
         model: target.model,
     });
