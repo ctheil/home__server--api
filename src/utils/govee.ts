@@ -26,8 +26,10 @@ interface Device {
   properties: {}[];
 }
 
+const GOVEE_API_KEY = "c778f145-07cd-4ea6-b519-c1e06df6ba6e";
+
 const GoveeClient = new Govee({
-  apiKey: "c778f145-07cd-4ea6-b519-c1e06df6ba6e",
+  apiKey: GOVEE_API_KEY,
   mac: "",
   model: "",
 });
@@ -41,7 +43,7 @@ export const getDevice = async (deviceName: string) => {
     return;
   }
   const device = new Govee({
-    apiKey: process.env.GOOVE_API_KEY,
+    apiKey: GOVEE_API_KEY,
     mac: target.device,
     model: target.model,
   });
