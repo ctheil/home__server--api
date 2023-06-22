@@ -54,3 +54,5 @@
 ::1 - - [22/Jun/2023:21:40:09 +0000] "GET /govee/bulb/state/bedside_lamp HTTP/1.1" 200 143 "-" "PostmanRuntime/7.32.3"
 ::1 - - [22/Jun/2023:21:40:10 +0000] "GET /govee/bulb/state/bedside_lamp HTTP/1.1" 500 75 "-" "PostmanRuntime/7.32.3"
 ::1 - - [22/Jun/2023:21:41:53 +0000] "GET /govee/bulb/state/bedside_lamp HTTP/1.1" 200 143 "-" "PostmanRuntime/7.32.3"
+::1 - - [22/Jun/2023:21:50:31 +0000] "GET /govee/bulb/state/bedside_lamp HTTP/1.1" 200 143 "-" "PostmanRuntime/7.32.3"
+::1 - - [22/Jun/2023:21:50:34 +0000] "POST /govee/bulb/state/bedside_lamp HTTP/1.1" 200 89 "-" "PostmanRuntime/7.32.3"

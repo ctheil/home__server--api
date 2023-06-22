@@ -12,6 +12,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setStripState = exports.getStripState = exports.setBulbState = exports.getState = void 0;
 const govee_1 = require("../utils/govee");
 const express_validator_1 = require("express-validator");
+const getDerivedState = (state) => {
+    let derivedState = "off";
+    if (state.brightness >= 51) {
+        derivedState = "full";
+    }
+    else if (state.brightness <= 50 && state.brightness > 0) {
+        derivedState = "half";
+    }
+    if (state.powerState === "off") {
+        derivedState = state.powerState;
+    }
+    return derivedState;
+};
 const getState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { deviceName } = req.params;
     if (!deviceName)
@@ -26,22 +39,7 @@ const getState = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             const keys = Object.keys(d);
             state[keys[0]] = d[keys[0]];
         });
-        let derivedState = "off";
-        if (state.brightness >= 51) {
-            derivedState = "full";
-        }
-        else if (state.brightness <= 50 && state.brightness > 0) {
-            derivedState = "half";
-        }
-        if (state.powerState === "off") {
-            derivedState = state.powerState;
-        }
-        // derivedState =
-        //   state.brightness >= 51
-        //     ? "full"
-        //     : state.brightness <= 50 && state.brightness > 0
-        //     ? "half"
-        //     : "off";
+        const derivedState = getDerivedState(state);
         res
             .status(200)
             .json({ message: "Good request", stateData: state, state: derivedState });
@@ -74,7 +72,14 @@ const setBulbState = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         device.setBrightness(newState.brightness);
         if (newState.color)
             device.setColor(newState.color);
-        return res.status(200).json({ message: "Good request" });
+        const derivedState = getDerivedState(newState);
+        return res
+            .status(200)
+            .json({
+            message: "Good request",
+            stateData: newState,
+            state: derivedState,
+        });
     }
     catch (err) {
         console.log(err);

@@ -2,6 +2,20 @@ import { NextFunction, Request, Response } from "express";
 import { getDevice } from "../utils/govee";
 import { validationResult } from "express-validator";
 
+const getDerivedState = (state: { brightness: number; powerState: string }) => {
+  let derivedState: "off" | "half" | "full" = "off";
+
+  if (state.brightness >= 51) {
+    derivedState = "full";
+  } else if (state.brightness <= 50 && state.brightness > 0) {
+    derivedState = "half";
+  }
+  if (state.powerState === "off") {
+    derivedState = state.powerState;
+  }
+  return derivedState;
+};
+
 export const getState = async (
   req: Request,
   res: Response,
@@ -23,23 +37,7 @@ export const getState = async (
       state[keys[0]] = d[keys[0]];
     });
 
-    let derivedState: "off" | "half" | "full" = "off";
-
-    if (state.brightness >= 51) {
-      derivedState = "full";
-    } else if (state.brightness <= 50 && state.brightness > 0) {
-      derivedState = "half";
-    }
-    if (state.powerState === "off") {
-      derivedState = state.powerState;
-    }
-    // derivedState =
-    //   state.brightness >= 51
-    //     ? "full"
-    //     : state.brightness <= 50 && state.brightness > 0
-    //     ? "half"
-    //     : "off";
-
+    const derivedState = getDerivedState(state);
     res
       .status(200)
       .json({ message: "Good request", stateData: state, state: derivedState });
@@ -78,7 +76,14 @@ export const setBulbState = async (
     device.setBrightness(newState.brightness);
 
     if (newState.color) device.setColor(newState.color);
-    return res.status(200).json({ message: "Good request" });
+    const derivedState = getDerivedState(newState);
+    return res
+      .status(200)
+      .json({
+        message: "Good request",
+        stateData: newState,
+        state: derivedState,
+      });
   } catch (err) {
     console.log(err);
     res
