@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDevice = void 0;
+exports.getGroup = exports.getDevice = void 0;
 // @ts-ignore
 const node_govee_led_1 = __importDefault(require("node-govee-led"));
 const promises_1 = __importDefault(require("fs/promises"));
@@ -42,3 +42,28 @@ const getDevice = (deviceName) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getDevice = getDevice;
+const getGroup = (groupName) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const g = yield promises_1.default.readFile(path_1.default.join(__dirname, "../../data/groups.json"));
+        const groups = JSON.parse(g.toString());
+        const group = groups[groupName];
+        if (!group) {
+            const error = new Error("no device found.");
+            throw error;
+        }
+        const targets = [];
+        for (let i = 0; i < group.length; i++) {
+            const device = new node_govee_led_1.default({
+                apiKey: GOVEE_API_KEY,
+                mac: group[i].MAC,
+                model: group[i].model,
+            });
+            targets.push(device);
+        }
+        return targets;
+    }
+    catch (err) {
+        console.warn("ERROR IN GET DEVICE: ", err);
+    }
+});
+exports.getGroup = getGroup;

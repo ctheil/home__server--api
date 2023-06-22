@@ -23,9 +23,7 @@ const postState = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         }
         let state = yield Roku_1.default.getState();
         if (state.state === toggleModeTo) {
-            return res
-                .status(200)
-                .json({
+            return res.status(200).json({
                 message: `State is already set to ${toggleModeTo}`,
                 state: state,
             });

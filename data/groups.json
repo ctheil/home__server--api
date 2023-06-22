@@ -1,0 +1,14 @@
+{
+  "bedroom": [
+    {
+      "deviceName": "bedside_lamp",
+      "MAC": "73:B5:D4:AD:FC:AB:50:9C",
+      "model": "H6009"
+    },
+    {
+      "deviceName": "strips",
+      "MAC": "EF:52:D4:AD:FC:C6:8E:DC",
+      "model": "H619D"
+    }
+  ]
+}

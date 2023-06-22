@@ -1,8 +1,10 @@
 import { Router } from "express";
 import {
+  getGroupState,
   getState,
   getStripState,
   setBulbState,
+  setGroupState,
   setStripState,
 } from "../controllers/govee";
 import { checkSchema } from "express-validator";
@@ -19,5 +21,8 @@ router.post(
 
 router.get("/strip/state/:deviceName", getStripState);
 router.post("/strip/state/:deviceName", setStripState);
+
+router.get("/group/state/:groupName", getGroupState);
+router.post("/group/state/:groupName", setGroupState);
 
 export default router;

@@ -38,3 +38,31 @@ export const getDevice = async (deviceName: string) => {
     throw err;
   }
 };
+
+export const getGroup = async (groupName: string) => {
+  try {
+    const g = await fs.readFile(path.join(__dirname, "../../data/groups.json"));
+    const groups = JSON.parse(g.toString());
+
+    const group = groups[groupName];
+
+    if (!group) {
+      const error = new Error("no device found.");
+      throw error;
+    }
+    const targets = [];
+
+    for (let i = 0; i < group.length; i++) {
+      const device = new Govee({
+        apiKey: GOVEE_API_KEY,
+        mac: group[i].MAC,
+        model: group[i].model,
+      });
+      targets.push(device);
+    }
+
+    return targets;
+  } catch (err) {
+    console.warn("ERROR IN GET DEVICE: ", err);
+  }
+};
