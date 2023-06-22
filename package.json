@@ -1,5 +1,5 @@
 {
-  "name": "node_server",
+  "name": "homeserver",
   "version": "1.0.0",
   "description": "Home server API alongside Home Assistant for performing various tasks.",
   "main": "server.js",
