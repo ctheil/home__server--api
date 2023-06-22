@@ -26,9 +26,9 @@ const getState = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             const keys = Object.keys(d);
             state[keys[0]] = d[keys[0]];
         });
-        const derivedState = state.brightness === 100
+        const derivedState = state.brightness >= 51
             ? "full"
-            : state.brightness <= 99 && state.brightness > 0
+            : state.brightness <= 50 && state.brightness > 0
                 ? "half"
                 : "off";
         res
@@ -36,9 +36,13 @@ const getState = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             .json({ message: "Good request", stateData: state, state: derivedState });
     }
     catch (err) {
+        console.log(err);
         res
             .status(500)
-            .json({ message: "Something went wrong fetching device state." });
+            .json({
+            message: "Something went wrong fetching device state.",
+            state: "unknown",
+        });
     }
 });
 exports.getState = getState;
@@ -64,6 +68,7 @@ const setBulbState = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         return res.status(200).json({ message: "Good request" });
     }
     catch (err) {
+        console.log(err);
         res
             .status(500)
             .json({ message: "Something went wrong setting the state." });

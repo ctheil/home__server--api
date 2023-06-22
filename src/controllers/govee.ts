@@ -24,9 +24,9 @@ export const getState = async (
     });
 
     const derivedState =
-      state.brightness === 100
+      state.brightness >= 51
         ? "full"
-        : state.brightness <= 99 && state.brightness > 0
+        : state.brightness <= 50 && state.brightness > 0
         ? "half"
         : "off";
 
@@ -34,9 +34,13 @@ export const getState = async (
       .status(200)
       .json({ message: "Good request", stateData: state, state: derivedState });
   } catch (err) {
+    console.log(err);
     res
       .status(500)
-      .json({ message: "Something went wrong fetching device state." });
+      .json({
+        message: "Something went wrong fetching device state.",
+        state: "unknown",
+      });
   }
 };
 
@@ -68,6 +72,7 @@ export const setBulbState = async (
     if (newState.color) device.setColor(newState.color);
     return res.status(200).json({ message: "Good request" });
   } catch (err) {
+    console.log(err);
     res
       .status(500)
       .json({ message: "Something went wrong setting the state." });
