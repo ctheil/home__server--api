@@ -1,8 +1,5 @@
 // @ts-ignore
 import Govee from "node-govee-led";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 // const testClient = {
 //   apiKey:
@@ -30,7 +27,7 @@ interface Device {
 }
 
 const GoveeClient = new Govee({
-  apiKey: process.env.GOOVE_API_KEY || "c778f145-07cd-4ea6-b519-c1e06df6ba6e",
+  apiKey: "c778f145-07cd-4ea6-b519-c1e06df6ba6e",
   mac: "",
   model: "",
 });
