@@ -8,11 +8,13 @@ const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const roku_1 = __importDefault(require("./routes/roku"));
+const govee_1 = __importDefault(require("./routes/govee"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
 app.use("/roku", roku_1.default);
+app.use("/govee", govee_1.default);
 app.listen(8081, () => {
     console.log(`Listening on 8081`);
 });
