@@ -1,5 +1,6 @@
 import {
   fetchState,
+  initSleep,
   triggerDarkMode,
   triggerLightMode,
   writeState,
@@ -13,11 +14,17 @@ class Roku {
   async togglePictureState(mode: string) {
     if (mode === "dark") await triggerDarkMode();
     if (mode === "light") await triggerLightMode();
-    return delay(2000).then(async () => await this.writeState(mode));
+    return delay(2000).then(async () => await this.writeState("state", mode));
+  }
+  async toggleSleepState(value: number) {
+    await initSleep(value);
+    return delay(2000).then(
+      async () => await this.writeState("sleepState", value)
+    );
   }
 
-  async writeState(newState: string) {
-    await writeState(newState);
+  async writeState(key: string, newState: string | number) {
+    await writeState(key, newState);
   }
   static async getState() {
     return await fetchState();

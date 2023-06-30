@@ -12,13 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchState = exports.toggle = exports.writeState = exports.triggerLightMode = exports.triggerDarkMode = void 0;
+exports.fetchState = exports.writeState = exports.initSleep = exports.triggerLightMode = exports.triggerDarkMode = void 0;
 // @ts-ignore
 const rokujs_1 = __importDefault(require("rokujs"));
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
-const roku = new rokujs_1.default("192.168.0.47");
-const int = 0;
+// const roku = new Roku("192.168.0.47"); // WIRELESS IP
+const roku = new rokujs_1.default("192.168.0.56"); // WIRELESS IP
+const int = 100;
 const openMenu = () => __awaiter(void 0, void 0, void 0, function* () {
     // toggle settings
     yield roku.press(rokujs_1.default.keys[11]);
@@ -90,6 +91,20 @@ const triggerLightMode = () => __awaiter(void 0, void 0, void 0, function* () {
     yield exit();
 });
 exports.triggerLightMode = triggerLightMode;
+const initSleep = (value) => __awaiter(void 0, void 0, void 0, function* () {
+    yield openMenu();
+    yield roku.press(rokujs_1.default.keys[4]);
+    yield roku.delay(int);
+    // value passed in plus one => 0 === 0.5; 1 === 1; 2 === 1.5 ...
+    for (let i = 0; i < value; i++) {
+        yield roku.press("down");
+        yield roku.delay(int);
+    }
+    yield roku.press(rokujs_1.default.keys[4]);
+    yield roku.delay(int);
+    yield exit();
+});
+exports.initSleep = initSleep;
 const p = path_1.default.join(__dirname, "../../data/state.json");
 const checkState = () => __awaiter(void 0, void 0, void 0, function* () {
     // @ts-ignore
@@ -101,26 +116,25 @@ const checkState = () => __awaiter(void 0, void 0, void 0, function* () {
     });
     return JSON.parse(state);
 });
-const writeState = (newState) => __awaiter(void 0, void 0, void 0, function* () {
+const writeState = (key, newState) => __awaiter(void 0, void 0, void 0, function* () {
     const state = { state: newState };
-    yield promises_1.default.writeFile(p, JSON.stringify(state));
+    const oldState = yield checkState();
+    yield promises_1.default.writeFile(p, JSON.stringify(Object.assign(Object.assign({}, oldState), { [key]: newState })));
 });
 exports.writeState = writeState;
 // add additional args for getting state and such for home assistant to trigger change in state.
 // test with different media types for different layout onscreen (i.e. dolby vs !4k)
-const toggle = (argv) => __awaiter(void 0, void 0, void 0, function* () {
-    if (argv === "dark") {
-        yield (0, exports.triggerDarkMode)();
-    }
-    else if (argv === "light") {
-        yield (0, exports.triggerLightMode)();
-    }
-    setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
-        yield (0, exports.writeState)(argv);
-        return yield checkState();
-    }), 2000);
-});
-exports.toggle = toggle;
+// export const toggle = async (argv: string) => {
+//   if (argv === "dark") {
+//     await triggerDarkMode();
+//   } else if (argv === "light") {
+//     await triggerLightMode();
+//   }
+//   setTimeout(async () => {
+//     await writeState(argv);
+//     return await checkState();
+//   }, 2000);
+// };
 const fetchState = () => __awaiter(void 0, void 0, void 0, function* () {
     const state = yield checkState();
     return state;

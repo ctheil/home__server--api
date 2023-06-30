@@ -1,3 +1,6 @@
 {
-  "cSpell.words": ["Cmds", "homeserver"]
+  "cSpell.words": ["Cmds", "homeserver"],
+  "files.associations": {
+    "*.yaml": "home-assistant"
+  }
 }

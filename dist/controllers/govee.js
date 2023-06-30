@@ -34,6 +34,7 @@ const sanitizeState = (stateData) => {
     return state;
 };
 const getState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    return res.status(410).json({ message: "Govee Routes Removed." });
     const { deviceName } = req.params;
     if (!deviceName)
         return res
@@ -58,6 +59,7 @@ const getState = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getState = getState;
 const setBulbState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    return res.status(410).json({ message: "Govee Routes Removed." });
     const errors = (0, express_validator_1.validationResult)(req);
     const errorMessages = errors.array();
     if (errorMessages.length > 0)
@@ -92,12 +94,14 @@ const setBulbState = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.setBulbState = setBulbState;
 const getStripState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    return res.status(410).json({ message: "Govee Routes Removed." });
     const { deviceName } = req.params;
     // const device = await getDevice(deviceName);
     return res.status(410).json({ message: "This endpoint is not ready yet." });
 });
 exports.getStripState = getStripState;
 const setStripState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    return res.status(410).json({ message: "Govee Routes Removed." });
     const { deviceName } = req.params;
     // const device = await getDevice(deviceName);
     return res.status(410).json({ message: "This endpoint is not ready yet." });
@@ -105,60 +109,58 @@ const setStripState = (req, res, next) => __awaiter(void 0, void 0, void 0, func
 exports.setStripState = setStripState;
 const getGroupStates = (groupName) => __awaiter(void 0, void 0, void 0, function* () { });
 const getGroupState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { groupName } = req.params;
-    try {
-        const devices = yield (0, govee_1.getGroup)(groupName);
-        if (!devices) {
-            throw new Error("Failed to fetch devices");
-        }
-        const derivedStates = [];
-        for (const device of devices) {
-            const state = sanitizeState((yield device.getState()).data.properties);
-            const derivedState = getDerivedState(state);
-            derivedStates.push(derivedState);
-        }
-        const uniqueStates = new Set(derivedStates);
-        let groupState;
-        if (uniqueStates.size > 1) {
-            groupState = "mixed";
-        }
-        else {
-            groupState = uniqueStates.values().next().value;
-        }
-        console.log(groupState);
-        res.status(200).json({ message: "State returned.", state: groupState });
-    }
-    catch (err) {
-        res.status(500).json({ message: "Could not get state." });
-    }
+    return res.status(410).json({ message: "Govee Routes Removed." });
+    // const { groupName } = req.params;
+    // try {
+    //   const devices = await getGroup(groupName);
+    //   if (!devices) {
+    //     throw new Error("Failed to fetch devices");
+    //   }
+    //   const derivedStates = [];
+    //   for (const device of devices) {
+    //     const state = sanitizeState((await device.getState()).data.properties);
+    //     const derivedState = getDerivedState(state);
+    //     derivedStates.push(derivedState);
+    //   }
+    //   const uniqueStates = new Set(derivedStates);
+    //   let groupState;
+    //   if (uniqueStates.size > 1) {
+    //     groupState = "mixed";
+    //   } else {
+    //     groupState = uniqueStates.values().next().value;
+    //   }
+    //   console.log(groupState);
+    //   res.status(200).json({ message: "State returned.", state: groupState });
+    // } catch (err) {
+    //   res.status(500).json({ message: "Could not get state." });
+    // }
 });
 exports.getGroupState = getGroupState;
 const setGroupState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { groupName } = req.params;
-    try {
-        const devices = yield (0, govee_1.getGroup)(groupName);
-        if (!devices) {
-            throw new Error("Devices failed to fetch");
-        }
-        const newState = req.body;
-        newState.powerState = newState.powerState === "on" ? true : false;
-        for (let i = 0; i < devices.length; i++) {
-            console.log("Toggling device: ", devices[i]);
-            console.log("new power state: ", newState.powerState);
-            if (!newState.powerState) {
-                console.log("RETURNING TURN OFF");
-                devices[i].turnOff();
-            }
-            else {
-                devices[i].turnOn();
-                console.log("RETURNING BRIGHTNESS");
-                devices[i].setBrightness(newState.brightness);
-            }
-        }
-        res.status(200).json({ message: "State updated!" });
-    }
-    catch (err) {
-        res.status(500).json({ message: "Could not update state." });
-    }
+    return res.status(410).json({ message: "Govee Routes Removed." });
+    // const { groupName } = req.params;
+    // try {
+    //   const devices = await getGroup(groupName);
+    //   if (!devices) {
+    //     throw new Error("Devices failed to fetch");
+    //   }
+    //   const newState = req.body;
+    //   newState.powerState = newState.powerState === "on" ? true : false;
+    //   for (let i = 0; i < devices.length; i++) {
+    //     console.log("Toggling device: ", devices[i]);
+    //     console.log("new power state: ", newState.powerState);
+    //     if (!newState.powerState) {
+    //       console.log("RETURNING TURN OFF");
+    //       devices[i].turnOff();
+    //     } else {
+    //       devices[i].turnOn();
+    //       console.log("RETURNING BRIGHTNESS");
+    //       devices[i].setBrightness(newState.brightness);
+    //     }
+    //   }
+    //   res.status(200).json({ message: "State updated!" });
+    // } catch (err) {
+    //   res.status(500).json({ message: "Could not update state." });
+    // }
 });
 exports.setGroupState = setGroupState;

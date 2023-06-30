@@ -1,0 +1,58 @@
+switch:
+# ROKU
+  - platform: rest
+    unique_id: "homeserver_roku-switch-1"
+    name: "roku_dark_mode"
+    resource: http://homeserver:8081/roku/state
+    body_on: '{"state":"dark"}'
+    body_off: '{"state":"light"}'
+    is_on_template: "{{value_json.state == 'dark'}}"
+    headers:
+      Content-Type: application/json
+# GROUPS
+  - platform: rest
+    name: "bedroom_half"
+    unique_id: "bedrooom_group-1"
+    resource: http://homeserver:8081/govee/group/state/bedroom
+    body_on: '{
+    "powerState": "on",
+    "brightness": 20
+}'
+    body_off: '{
+    "powerState": "off",
+    "brightness": 0
+}'
+    is_on_template: "{{value_json.state == 'half'}}"
+    headers:
+      Content-Type: application/json
+  - platform: rest
+    name: "bedroom_full"
+    unique_id: "bedrooom_group-2"
+    resource: http://homeserver:8081/govee/group/state/bedroom
+    body_on: '{
+    "powerState": "on",
+    "brightness": 100
+}'
+    body_off: '{
+    "powerState": "off",
+    "brightness": 0
+}'
+    is_on_template: "{{value_json.state == 'full'}}"
+    headers:
+      Content-Type: application/json
+
+light: 
+  - platform: rest
+    name: "Bedside Lamp"
+    unique_id: bedside_lamp-1
+    resource: http://homeserver:8081/govee/bulb/state/bedside_lamp
+    method: POST
+    body_on: '{powerState: "on"}'
+    body_off: '{powerState: "off"}'
+    is_on_template: '{{value_json.powerState == "on"}}'
+    brightness_template: '{{value_json.brightness == "on"}}'
+    headers:
+      Content-Type: application/json
+
+
+      homeassistant/amd64-hassio-supervisor

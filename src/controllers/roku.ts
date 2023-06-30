@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { toggle, fetchState, writeState } from "../utils/roku";
+import { fetchState, writeState, initSleep } from "../utils/roku";
 import Roku from "../models/Roku";
 
 interface Controller {
@@ -56,4 +56,17 @@ export const getState = async (
   } catch (err) {
     res.status(500).json({ message: "Could not get roku state." });
   }
+};
+
+export const postSleep = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const val: number = req.body.sleepState;
+  const roku = new Roku();
+  const result = await roku.toggleSleepState(val);
+  const state = await Roku.getState();
+  await initSleep(val + 1);
+  res.status(200).json({ message: "Sleep initiated", state: state });
 };

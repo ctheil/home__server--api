@@ -19,12 +19,18 @@ class Roku {
                 yield (0, roku_1.triggerDarkMode)();
             if (mode === "light")
                 yield (0, roku_1.triggerLightMode)();
-            return delay(2000).then(() => __awaiter(this, void 0, void 0, function* () { return yield this.writeState(mode); }));
+            return delay(2000).then(() => __awaiter(this, void 0, void 0, function* () { return yield this.writeState("state", mode); }));
         });
     }
-    writeState(newState) {
+    toggleSleepState(value) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield (0, roku_1.writeState)(newState);
+            yield (0, roku_1.initSleep)(value);
+            return delay(2000).then(() => __awaiter(this, void 0, void 0, function* () { return yield this.writeState("sleepState", value); }));
+        });
+    }
+    writeState(key, newState) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield (0, roku_1.writeState)(key, newState);
         });
     }
     static getState() {

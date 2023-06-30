@@ -12,7 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getState = exports.postState = void 0;
+exports.postSleep = exports.getState = exports.postState = void 0;
+const roku_1 = require("../utils/roku");
 const Roku_1 = __importDefault(require("../models/Roku"));
 const postState = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const toggleModeTo = req.body.state;
@@ -54,3 +55,12 @@ const getState = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getState = getState;
+const postSleep = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const val = req.body.sleepState;
+    const roku = new Roku_1.default();
+    const result = yield roku.toggleSleepState(val);
+    const state = yield Roku_1.default.getState();
+    yield (0, roku_1.initSleep)(val + 1);
+    res.status(200).json({ message: "Sleep initiated", state: state });
+});
+exports.postSleep = postSleep;

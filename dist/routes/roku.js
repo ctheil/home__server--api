@@ -5,4 +5,6 @@ const router = (0, express_1.Router)();
 const roku_1 = require("../controllers/roku");
 router.get("/state", roku_1.getState);
 router.post("/state", roku_1.postState);
+router.get("/sleep", roku_1.getState);
+router.post("/sleep", roku_1.postSleep);
 exports.default = router;

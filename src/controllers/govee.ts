@@ -30,6 +30,7 @@ export const getState = async (
   res: Response,
   next: NextFunction
 ) => {
+  return res.status(410).json({ message: "Govee Routes Removed." });
   const { deviceName } = req.params;
   if (!deviceName)
     return res
@@ -59,6 +60,7 @@ export const setBulbState = async (
   res: Response,
   next: NextFunction
 ) => {
+  return res.status(410).json({ message: "Govee Routes Removed." });
   const errors = validationResult(req);
   const errorMessages = errors.array();
   if (errorMessages.length > 0)
@@ -99,6 +101,7 @@ export const getStripState = async (
   res: Response,
   next: NextFunction
 ) => {
+  return res.status(410).json({ message: "Govee Routes Removed." });
   const { deviceName } = req.params;
 
   // const device = await getDevice(deviceName);
@@ -109,6 +112,7 @@ export const setStripState = async (
   res: Response,
   next: NextFunction
 ) => {
+  return res.status(410).json({ message: "Govee Routes Removed." });
   const { deviceName } = req.params;
 
   // const device = await getDevice(deviceName);
@@ -122,31 +126,32 @@ export const getGroupState = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { groupName } = req.params;
-  try {
-    const devices = await getGroup(groupName);
-    if (!devices) {
-      throw new Error("Failed to fetch devices");
-    }
-    const derivedStates = [];
-    for (const device of devices) {
-      const state = sanitizeState((await device.getState()).data.properties);
-      const derivedState = getDerivedState(state);
-      derivedStates.push(derivedState);
-    }
-    const uniqueStates = new Set(derivedStates);
-    let groupState;
-    if (uniqueStates.size > 1) {
-      groupState = "mixed";
-    } else {
-      groupState = uniqueStates.values().next().value;
-    }
-    console.log(groupState);
+  return res.status(410).json({ message: "Govee Routes Removed." });
+  // const { groupName } = req.params;
+  // try {
+  //   const devices = await getGroup(groupName);
+  //   if (!devices) {
+  //     throw new Error("Failed to fetch devices");
+  //   }
+  //   const derivedStates = [];
+  //   for (const device of devices) {
+  //     const state = sanitizeState((await device.getState()).data.properties);
+  //     const derivedState = getDerivedState(state);
+  //     derivedStates.push(derivedState);
+  //   }
+  //   const uniqueStates = new Set(derivedStates);
+  //   let groupState;
+  //   if (uniqueStates.size > 1) {
+  //     groupState = "mixed";
+  //   } else {
+  //     groupState = uniqueStates.values().next().value;
+  //   }
+  //   console.log(groupState);
 
-    res.status(200).json({ message: "State returned.", state: groupState });
-  } catch (err) {
-    res.status(500).json({ message: "Could not get state." });
-  }
+  //   res.status(200).json({ message: "State returned.", state: groupState });
+  // } catch (err) {
+  //   res.status(500).json({ message: "Could not get state." });
+  // }
 };
 
 export const setGroupState = async (
@@ -154,30 +159,31 @@ export const setGroupState = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { groupName } = req.params;
-  try {
-    const devices = await getGroup(groupName);
-    if (!devices) {
-      throw new Error("Devices failed to fetch");
-    }
-    const newState = req.body;
+  return res.status(410).json({ message: "Govee Routes Removed." });
+  // const { groupName } = req.params;
+  // try {
+  //   const devices = await getGroup(groupName);
+  //   if (!devices) {
+  //     throw new Error("Devices failed to fetch");
+  //   }
+  //   const newState = req.body;
 
-    newState.powerState = newState.powerState === "on" ? true : false;
-    for (let i = 0; i < devices.length; i++) {
-      console.log("Toggling device: ", devices[i]);
-      console.log("new power state: ", newState.powerState);
-      if (!newState.powerState) {
-        console.log("RETURNING TURN OFF");
-        devices[i].turnOff();
-      } else {
-        devices[i].turnOn();
-        console.log("RETURNING BRIGHTNESS");
-        devices[i].setBrightness(newState.brightness);
-      }
-    }
+  //   newState.powerState = newState.powerState === "on" ? true : false;
+  //   for (let i = 0; i < devices.length; i++) {
+  //     console.log("Toggling device: ", devices[i]);
+  //     console.log("new power state: ", newState.powerState);
+  //     if (!newState.powerState) {
+  //       console.log("RETURNING TURN OFF");
+  //       devices[i].turnOff();
+  //     } else {
+  //       devices[i].turnOn();
+  //       console.log("RETURNING BRIGHTNESS");
+  //       devices[i].setBrightness(newState.brightness);
+  //     }
+  //   }
 
-    res.status(200).json({ message: "State updated!" });
-  } catch (err) {
-    res.status(500).json({ message: "Could not update state." });
-  }
+  //   res.status(200).json({ message: "State updated!" });
+  // } catch (err) {
+  //   res.status(500).json({ message: "Could not update state." });
+  // }
 };
