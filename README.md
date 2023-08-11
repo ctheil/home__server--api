@@ -10,3 +10,8 @@ This uses the Node Roku API and acts as a remote, and flows through the steps to
 
 ## Where does it live?
 This API, along with portainer, a plex media server, home assistant, and a cloudflare tunnel, are all containerized and running on an older PC that I restored with Ubuntu Server. 
+
+## Docker
+The dockerization of this entire project has been incredible, yet complicated. 
+### Docker Internal Networking
+The most compplicated part about this setup is allowing the containers to communicate with one-another. Allowing homeassistant to communicate with this API, plex, and allowing cloudflre to expore the containers via a tunnel means I needed to initialize an internal network for internal communication. While this may sound trivial, and the setup was indeed trivial, it introduces more steps and deviation when troubleshooting, esepcially when very few people running homeassistant have a similar setup.
