@@ -3,8 +3,8 @@ import Roku from "rokujs";
 import fs from "fs/promises";
 import path from "path";
 
-// const roku = new Roku("192.168.0.47"); // WIRELESS IP
-const roku = new Roku("192.168.0.56"); // WIRELESS IP
+const roku = new Roku("192.168.0.47"); // WIRELESS IP
+//const roku = new Roku("192.168.0.56"); // wired IP
 const int = 100;
 
 const openMenu = async () => {

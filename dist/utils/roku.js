@@ -17,8 +17,8 @@ exports.fetchState = exports.writeState = exports.initSleep = exports.triggerLig
 const rokujs_1 = __importDefault(require("rokujs"));
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
-// const roku = new Roku("192.168.0.47"); // WIRELESS IP
-const roku = new rokujs_1.default("192.168.0.56"); // WIRELESS IP
+const roku = new rokujs_1.default("192.168.0.47"); // WIRELESS IP
+//const roku = new Roku("192.168.0.56"); // wired IP
 const int = 100;
 const openMenu = () => __awaiter(void 0, void 0, void 0, function* () {
     // toggle settings
